@@ -3,10 +3,10 @@ def operate_two(a, b):
         return True
     else :
         return False
-def operate_four(a, b, c, d):
+# def operate_four(a, b, c, d):
+#
+# def find_24(a, b, c, d):
 
-def find_24(a, b, c, d):
-    
 def poss_two(a, b):
     return [a * b, a + b, abs(a - b), a / b, b / a]
 
