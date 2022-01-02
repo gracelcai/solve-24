@@ -7,12 +7,47 @@ def test_nums_reach_x(nums, target):
 
     """
     if len(nums) == 1:
-        return [] if target != num[0] else nums
+        return [] if target != nums[0] else nums
 
 
     expression = []
 
     a = nums[0]
+
+    expr1 = test_nums_reach_x(nums[1:], target - a)
+    if len(expr1) > 0:
+        return ['+', a, expr1]
+
+    if target % a == 0:
+        expr1 = test_nums_reach_x(nums[1:], target / a)
+        if len(expr1) > 0:
+            return ['*', a, expr1]
+
+    expr1 = test_nums_reach_x(nums[1:], target + a)
+    if len(expr1) > 0:
+        return ['-',  expr1, a]
+
+    expr1 = test_nums_reach_x(nums[1:], a - target)
+    if len(expr1) > 0:
+        return ['-',  a, expr1]
+
+    expr1 = test_nums_reach_x(nums[1:], target * a)
+    if len(expr1) > 0:
+        return ['/',   expr1, a]
+
+    if a % target == 0:
+        expr1 = test_nums_reach_x(nums[1:],  a / target)
+        if len(expr1) > 0:
+            return ['/',  a,   expr1]
+
+
+    return []
+
+
+
+
+"""
+
 
     if a * b == 24:
         expression = ['*', a ,b]
@@ -28,6 +63,7 @@ def test_nums_reach_x(nums, target):
         pass
 
     return expression
+"""
 
 
 def operate_four(a, b, c, d):
@@ -52,6 +88,11 @@ def poss_two(a, b):
 
 print("Please enter numbers separated by a comma")
 s = input()
-nums = [ int(x) for x in s.split(',')]
 
-print(operate_two(nums[0], nums[1]))
+
+y =  s.split(',')
+
+
+nums = [ int(x) for x in y ]
+
+print(test_nums_reach_x(nums, 24))
