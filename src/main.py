@@ -6,6 +6,8 @@ def test_nums_reach_x(nums, target):
     11, 13 : [ ' + ' , 11, 13]
 
     """
+    print("target is ", target , "trying nums :", nums)
+
     if len(nums) == 1:
         return [] if target != nums[0] else nums
 
@@ -14,14 +16,19 @@ def test_nums_reach_x(nums, target):
 
     a = nums[0]
 
+    print(f"trying add , with target {target}, a {a}")
     expr1 = test_nums_reach_x(nums[1:], target - a)
     if len(expr1) > 0:
         return ['+', a, expr1]
 
+    print(f"trying multiple , with target {target}, a {a}")
     if target % a == 0:
         expr1 = test_nums_reach_x(nums[1:], target / a)
         if len(expr1) > 0:
             return ['*', a, expr1]
+
+
+    print(f"trying subtract  , with target {target}, a {a}")
 
     expr1 = test_nums_reach_x(nums[1:], target + a)
     if len(expr1) > 0:
