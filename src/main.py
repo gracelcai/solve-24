@@ -13,43 +13,55 @@ def test_nums_reach_x(nums, target):
 
 
     expression = []
+    for i in range(1, len(nums)):
+        new_nums = nums[1:i] + nums[i + 1:]
+        print(new_nums)
+        coms = get_poss_coms(nums[0], nums[i])
+        for a in coms.keys():
+            expr2 = [coms[a], nums[0], nums[i]]
 
-    a = nums[0]
+            print(f"trying add , with target {target}, a {a}")
+            expr1 = test_nums_reach_x(new_nums, target - a)
+            if len(expr1) > 0:
+                return ['+', expr2, expr1]
 
-    print(f"trying add , with target {target}, a {a}")
-    expr1 = test_nums_reach_x(nums[1:], target - a)
-    if len(expr1) > 0:
-        return ['+', a, expr1]
-
-    print(f"trying multiple , with target {target}, a {a}")
-    if target % a == 0:
-        expr1 = test_nums_reach_x(nums[1:], target / a)
-        if len(expr1) > 0:
-            return ['*', a, expr1]
+            print(f"trying multiple , with target {target}, a {a}")
+            if target % a == 0:
+                expr1 = test_nums_reach_x(new_nums, target / a)
+                if len(expr1) > 0:
+                    return ['*', expr2, expr1]
 
 
-    print(f"trying subtract  , with target {target}, a {a}")
+            print(f"trying subtract  , with target {target}, a {a}")
 
-    expr1 = test_nums_reach_x(nums[1:], target + a)
-    if len(expr1) > 0:
-        return ['-',  expr1, a]
+            expr1 = test_nums_reach_x(new_nums, target + a)
+            if len(expr1) > 0:
+                return ['-',  expr1, expr2]
 
-    expr1 = test_nums_reach_x(nums[1:], a - target)
-    if len(expr1) > 0:
-        return ['-',  a, expr1]
+            expr1 = test_nums_reach_x(new_nums, a - target)
+            if len(expr1) > 0:
+                return ['-',  expr2, expr1]
 
-    expr1 = test_nums_reach_x(nums[1:], target * a)
-    if len(expr1) > 0:
-        return ['/',   expr1, a]
+            expr1 = test_nums_reach_x(new_nums, target * a)
+            if len(expr1) > 0:
+                return ['/',   expr1, expr2]
 
-    if a % target == 0:
-        expr1 = test_nums_reach_x(nums[1:],  a / target)
-        if len(expr1) > 0:
-            return ['/',  a,   expr1]
+            if a % target == 0:
+                expr1 = test_nums_reach_x(new_nums,  a / target)
+                if len(expr1) > 0:
+                    return ['/',  expr2,   expr1]
 
 
     return []
 
+def get_poss_coms(a, b):
+    coms = {a + b: '+', max(a, b) - min(a, b): '-', a * b: '*'}
+    if a % b == 0:
+        coms[a / b] = '/'
+    if b % a == 0:
+        coms[b / a] = '/'
+
+    return coms
 
 
 
