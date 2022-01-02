@@ -11,25 +11,23 @@ def test_nums_reach_x(nums, target):
     if len(nums) == 1:
         return [] if target != nums[0] else nums
 
-
-    expression = []
-    for i in range(1, len(nums)):
+    for i in range(len(nums)):
         new_nums = nums[1:i] + nums[i + 1:]
         print(new_nums)
-        coms = get_poss_coms(nums[0], nums[i])
+        coms = get_poss_coms(nums[0], nums[i]) if i != 0 else {nums[0]: nums[0]}
         for a in coms.keys():
-            expr2 = [coms[a], nums[0], nums[i]]
-
+            expr2 = coms[a]
             print(f"trying add , with target {target}, a {a}")
             expr1 = test_nums_reach_x(new_nums, target - a)
             if len(expr1) > 0:
                 return ['+', expr2, expr1]
 
             print(f"trying multiple , with target {target}, a {a}")
-            if target % a == 0:
-                expr1 = test_nums_reach_x(new_nums, target / a)
-                if len(expr1) > 0:
-                    return ['*', expr2, expr1]
+            if a != 0:
+                if target % a == 0:
+                    expr1 = test_nums_reach_x(new_nums, target / a)
+                    if len(expr1) > 0:
+                        return ['*', expr2, expr1]
 
 
             print(f"trying subtract  , with target {target}, a {a}")
@@ -45,21 +43,21 @@ def test_nums_reach_x(nums, target):
             expr1 = test_nums_reach_x(new_nums, target * a)
             if len(expr1) > 0:
                 return ['/',   expr1, expr2]
-
-            if a % target == 0:
-                expr1 = test_nums_reach_x(new_nums,  a / target)
-                if len(expr1) > 0:
-                    return ['/',  expr2,   expr1]
+            if target != 0:
+                if a % target == 0:
+                    expr1 = test_nums_reach_x(new_nums,  a / target)
+                    if len(expr1) > 0:
+                        return ['/',  expr2,   expr1]
 
 
     return []
 
 def get_poss_coms(a, b):
-    coms = {a + b: '+', max(a, b) - min(a, b): '-', a * b: '*'}
+    coms = {a + b: ('+', str(a), str(b)), max(a, b) - min(a, b): ('-', str(max(a, b)), str(min(a, b))), a * b: ('*', str(a), str(b))}
     if a % b == 0:
-        coms[a / b] = '/'
+        coms[a / b] = ('/', str(a), str(b))
     if b % a == 0:
-        coms[b / a] = '/'
+        coms[b / a] = ('/', str(b), str(a))
 
     return coms
 
@@ -97,13 +95,6 @@ def operate_four(a, b, c, d):
     return []
 
 
-
-
-def find_24(a, b, c, d):
-    pass
-
-def poss_two(a, b):
-    return [a * b, a + b, abs(a - b), a / b, b / a]
 
 print("Please enter numbers separated by a comma")
 s = input()
